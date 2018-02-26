@@ -22,4 +22,3 @@ public class RinkanUserDetailService implements UserDetailsService {
         return user;
     }
 }
-l
