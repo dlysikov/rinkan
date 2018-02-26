@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/security"
+             xmlns:beans="http://www.springframework.org/schema/beans"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+		http://www.springframework.org/schema/security
+		http://www.springframework.org/schema/security/spring-security.xsd">
+
+    <http auto-config="true" use-expressions="true">
+        <intercept-url pattern="/login*" access="isAnonymous()"/>
+        <intercept-url pattern="/user**" access="hasRole('ROLE_USER')" />
+        <intercept-url pattern="/admin**" access="hasRole('ROLE_ADMIN')" />
+
+        <form-login
+                login-page="/login"
+                username-parameter="username"
+                password-parameter="password"
+                login-processing-url="/please_login_me"
+        />
+        <remember-me key="uniqueAndSecret" />
+
+        <logout  logout-url="/dima_logout"/>
+        <access-denied-handler error-page="/accessDenied"/>
+        <!-- enable csrf protection -->
+        <csrf/>
+    </http>
+
+    <authentication-manager>
+        <authentication-provider user-service-ref="rinkanUserDetails">
+           <!-- <user-service>
+                <user name="user" password="user" authorities="ROLE_USER" />
+                <user name="admin" password="admin" authorities="ROLE_ADMIN" />
+            </user-service>-->
+        </authentication-provider>
+    </authentication-manager>
+
+    <beans:bean id="rinkanUserDetails" class="com.rinkan.security.provider.RinkanUserDetailService"></beans:bean>
+
+</beans:beans>
